@@ -201,28 +201,34 @@ nb_path: "00_core.ipynb"
     {% raw %}
     
 <div class="cell border-box-sizing code_cell rendered">
-<div class="input">
 
-<div class="inner_cell">
-    <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="k">def</span> <span class="nf">period_returns_from_prices</span><span class="p">(</span><span class="n">tik_prices</span><span class="p">,</span> <span class="n">wr</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Given one or more sequences of prices, compute the returns over each adjacent pair of rows.</span>
-<span class="sd">    Returns a dataframe containing period returns with row count one less than `tik_prices`.</span>
-<span class="sd">    </span>
-<span class="sd">    Arguments:</span>
-<span class="sd">        tik_prices: DataFrame of ordered prices: ticker column names, rows indexed by date</span>
-<span class="sd">        wr: if true, returns are represented as wealth ratios (1.01 &lt;=&gt; 1% return), else as </span>
-<span class="sd">        fractional returns (0.01 &lt;=&gt; 1% return)</span>
-<span class="sd">    &quot;&quot;&quot;</span>
-    <span class="n">prices</span> <span class="o">=</span> <span class="n">tik_prices</span><span class="o">.</span><span class="n">to_numpy</span><span class="p">()</span>
-    <span class="c1"># 1st row of ratios is 2nd row of prices divided by first, &amp; so forth</span>
-    <span class="n">ratios</span> <span class="o">=</span> <span class="n">prices</span><span class="p">[</span><span class="mi">1</span><span class="p">:]</span> <span class="o">/</span> <span class="n">prices</span><span class="p">[:</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
-    <span class="n">returns</span> <span class="o">=</span> <span class="n">ratios</span> <span class="o">-</span> <span class="mi">1</span>
-    <span class="k">return</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">ratios</span> <span class="k">if</span> <span class="n">wr</span> <span class="k">else</span> <span class="n">returns</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="n">tik_prices</span><span class="o">.</span><span class="n">index</span><span class="p">[</span><span class="mi">1</span><span class="p">:],</span> <span class="n">columns</span><span class="o">=</span><span class="n">tik_prices</span><span class="o">.</span><span class="n">columns</span><span class="p">)</span>
-</pre></div>
+</div>
+    {% endraw %}
 
-    </div>
+    {% raw %}
+    
+<div class="cell border-box-sizing code_cell rendered">
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="output_area">
+
+
+<div class="output_markdown rendered_html output_subarea ">
+<h4 id="period_returns_from_prices" class="doc_header"><code>period_returns_from_prices</code><a href="https://github.com/rickatx/rfpfolio/tree/master/rfpfolio/core.py#L57" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>period_returns_from_prices</code>(<strong><code>tik_prices</code></strong>, <strong><code>wr</code></strong>=<em><code>False</code></em>)</p>
+</blockquote>
+<p>Given one or more sequences of prices, compute the returns over each adjacent pair of rows.
+Returns a dataframe containing period returns with row count one less than <code>tik_prices</code>.</p>
+<p>Arguments:
+    tik_prices: DataFrame of ordered prices: ticker column names, rows indexed by date
+    wr: if true, returns are represented as wealth ratios (1.01 &lt;=&gt; 1% return), else as
+    fractional returns (0.01 &lt;=&gt; 1% return)</p>
+
+</div>
+
+</div>
+
 </div>
 </div>
 
@@ -679,113 +685,6 @@ nb_path: "00_core.ipynb"
 </div>
 </div>
 </div>
-    {% raw %}
-    
-<div class="cell border-box-sizing code_cell rendered">
-<div class="input">
-
-<div class="inner_cell">
-    <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="k">def</span> <span class="nf">pf_cum_wr_seq</span><span class="p">(</span><span class="n">price_df</span><span class="p">,</span> <span class="n">weights</span><span class="p">,</span> <span class="n">rebal_period</span><span class="p">,</span> <span class="n">normalize_wts</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Compute the sequence of cumulative portfolio wealth ratios from a sequence of asset prices, with </span>
-<span class="sd">    rebalancing at a fixed interval. </span>
-<span class="sd">    </span>
-<span class="sd">    Args:</span>
-<span class="sd">        price_df: Dataframe of asset returns as (noncumulative) wealth ratios, indexed by date</span>
-<span class="sd">        weights [list]: portfolio weights for each asset ordered the same as columns of `price_df`</span>
-<span class="sd">        rebal_period: length of the rebalance period, expressed in number of rows of `price_df`</span>
-<span class="sd">        </span>
-<span class="sd">    Returns:</span>
-<span class="sd">        A python (double) array containing the sequence of portfolio values (cumulative wealth ratios)</span>
-<span class="sd">    &quot;&quot;&quot;</span>
-    <span class="c1"># weights, as a 1-row 2D matrix</span>
-    <span class="n">weight_ar</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">weights</span><span class="p">])</span>
-    
-    <span class="k">if</span> <span class="n">normalize_wts</span><span class="p">:</span>
-        <span class="n">weight_ar</span> <span class="o">=</span> <span class="n">weight_ar</span> <span class="o">/</span> <span class="n">weight_ar</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span>
-    
-    <span class="c1"># cols: wr&#39;s for a ticker.  rows: dates</span>
-    <span class="n">returns</span> <span class="o">=</span> <span class="n">price_df</span><span class="o">.</span><span class="n">to_numpy</span><span class="p">()</span>
-    
-    <span class="n">period_start_ind</span> <span class="o">=</span> <span class="mi">0</span>
-    <span class="n">pf_val</span> <span class="o">=</span> <span class="mi">1</span>
-    
-    <span class="c1"># list of pf values:</span>
-    <span class="n">pf_values</span> <span class="o">=</span> <span class="n">array</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="s1">&#39;d&#39;</span><span class="p">)</span>
-    
-    <span class="k">while</span> <span class="p">(</span><span class="n">period_start_ind</span> <span class="o">&lt;</span> <span class="n">returns</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]):</span>
-        <span class="c1"># first row of array for cumprod is the initial capital per asset</span>
-        <span class="n">row_1</span> <span class="o">=</span> <span class="n">weight_ar</span> <span class="o">*</span> <span class="n">pf_val</span>
-        
-        <span class="c1"># get the data for the next rebalance period</span>
-        <span class="n">rebal_period_return_data</span> <span class="o">=</span> <span class="n">returns</span><span class="p">[</span><span class="n">period_start_ind</span><span class="p">:</span><span class="n">period_start_ind</span><span class="o">+</span><span class="n">rebal_period</span><span class="p">]</span>
-        
-        <span class="c1"># Result of this operation: first row is initial capital per asset after rebalancing; </span>
-        <span class="c1"># each subsequent row is the capital at subsequent dates</span>
-        <span class="n">ar_for_cumprod</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">row_1</span><span class="p">,</span> <span class="n">rebal_period_return_data</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
-        <span class="n">asset_values</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">cumprod</span><span class="p">(</span><span class="n">ar_for_cumprod</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
-        
-        <span class="c1"># Compute sequence of portfolio values: sum of columns (asset vals) for each row.</span>
-        <span class="c1"># Drop first value as it was the sum of the intitializing values (asset values).</span>
-        <span class="n">pf_rebal_period_values</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">asset_values</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)[</span><span class="mi">1</span><span class="p">:]</span>
-        
-        <span class="c1"># append portfolio values for the rebalancing period to `pf_values`</span>
-        <span class="n">pf_values</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="n">pf_rebal_period_values</span><span class="p">)</span>
-        
-        <span class="c1"># portfolio value at the end of the rebal period; use to compute starting capital</span>
-        <span class="c1"># for each asset at the start of the next rebalancing period.</span>
-        <span class="n">pf_val</span> <span class="o">=</span> <span class="n">pf_rebal_period_values</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
-        
-        <span class="n">period_start_ind</span> <span class="o">+=</span> <span class="n">rebal_period</span>
-        
-    <span class="k">return</span> <span class="n">pf_values</span>
-</pre></div>
-
-    </div>
-</div>
-</div>
-
-</div>
-    {% endraw %}
-
-    {% raw %}
-    
-<div class="cell border-box-sizing code_cell rendered">
-<div class="input">
-
-<div class="inner_cell">
-    <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="k">def</span> <span class="nf">pf_period_returns</span><span class="p">(</span><span class="n">price_df</span><span class="p">,</span> <span class="n">weights</span><span class="p">,</span> <span class="n">rebal_period</span><span class="p">,</span> <span class="n">pf_name</span><span class="p">,</span> <span class="n">pf_start_val</span> <span class="o">=</span> <span class="mi">1</span><span class="p">,</span> <span class="n">normalize_wts</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Compute the sequence of portfolio period returns from a sequence of asset prices, with rebalancing </span>
-<span class="sd">    at a fixed interval.</span>
-<span class="sd">    </span>
-<span class="sd">    Arguments:</span>
-<span class="sd">        price_df: Dataframe of asset returns as (noncumulative) wealth ratios, indexed by date</span>
-<span class="sd">        weights: portfolio weights for each asset ordered the same as columns of `price_df`</span>
-<span class="sd">        pf_name: name for this portfolio -- will appear as column name</span>
-<span class="sd">        rebal_period: length of the rebalance period, expressed in number of rows of `price_df`</span>
-<span class="sd">        </span>
-<span class="sd">    Returns:</span>
-<span class="sd">        A DataFrame containing the sequence of portfolio period returns</span>
-<span class="sd">    &quot;&quot;&quot;</span>
-    <span class="c1"># Compute portfolio cumulative wealth ratios (with rebalancing).</span>
-    <span class="n">pf_val_ar</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">pf_cum_wr_seq</span><span class="p">(</span><span class="n">price_df</span><span class="p">,</span> <span class="n">weights</span><span class="p">,</span> <span class="n">rebal_period</span><span class="p">,</span> <span class="n">normalize_wts</span><span class="p">))</span>
-    
-    <span class="c1"># Cumulative wealth ratios to period returns</span>
-    <span class="n">pf_ret_ar</span> <span class="o">=</span> <span class="n">cum_wr_to_period_returns</span><span class="p">(</span><span class="n">pf_val_ar</span><span class="p">)</span>
-    
-    <span class="k">return</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">pf_ret_ar</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="n">price_df</span><span class="o">.</span><span class="n">index</span><span class="p">,</span> <span class="n">columns</span><span class="o">=</span><span class="p">[</span><span class="n">pf_name</span><span class="p">])</span>
-</pre></div>
-
-    </div>
-</div>
-</div>
-
-</div>
-    {% endraw %}
-
 <div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
 <p><strong>Following is the usual entry point.</strong></p>
@@ -796,34 +695,39 @@ nb_path: "00_core.ipynb"
     {% raw %}
     
 <div class="cell border-box-sizing code_cell rendered">
-<div class="input">
 
-<div class="inner_cell">
-    <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="k">def</span> <span class="nf">computePortfolioReturns</span><span class="p">(</span><span class="n">p_src</span><span class="p">:</span> <span class="n">PriceSource</span><span class="p">,</span> <span class="n">asset_weights</span><span class="p">,</span> <span class="n">pf_name</span><span class="p">,</span> <span class="n">rebal_period</span><span class="p">,</span> 
-                            <span class="n">period</span><span class="o">=</span><span class="s1">&#39;weekly&#39;</span><span class="p">,</span><span class="n">start_date</span><span class="o">=</span><span class="s1">&#39;2017-05-01&#39;</span><span class="p">,</span> <span class="n">normalize_wts</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Given tickers and their weights, compute the sequence of portfolio returns with rebalancing at a fixed interval.</span>
-<span class="sd">    </span>
-<span class="sd">    Arguments:</span>
-<span class="sd">        p_src</span>
-<span class="sd">        asset_weights: dictionary from ticker to weight for this asset in pf (weights will)</span>
-<span class="sd">        pf_name: name for this portfolio -- will appear as column name</span>
-<span class="sd">        rebal_period: length of the rebalance period, expressed in number of rows of `price_df`</span>
-<span class="sd">        period: &#39;weekly&#39;, or &#39;monthly&#39;</span>
-<span class="sd">        start_date: date of first period in sequence; first rebalance period begins with this period</span>
-<span class="sd">        normalize_wts: if true, normalize weights to sum to 1</span>
-<span class="sd">        </span>
-<span class="sd">    Returns:</span>
-<span class="sd">        A DataFrame containing the sequence of portfolio returns (value of 0.01 =&gt; 1% return), indexed by date.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
-    <span class="n">adjPrices</span> <span class="o">=</span> <span class="n">p_src</span><span class="o">.</span><span class="n">loadAllAdjustedPrices</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="n">asset_weights</span><span class="o">.</span><span class="n">keys</span><span class="p">()),</span> <span class="n">subdir</span><span class="o">=</span><span class="n">period</span><span class="p">)</span>
-    <span class="n">asset_returns</span> <span class="o">=</span> <span class="n">period_returns_from_prices</span><span class="p">(</span><span class="n">adjPrices</span><span class="p">,</span> <span class="n">wr</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">start_date</span><span class="p">:]</span>
+</div>
+    {% endraw %}
+
+    {% raw %}
     
-    <span class="k">return</span> <span class="n">pf_period_returns</span><span class="p">(</span><span class="n">asset_returns</span><span class="p">,</span> <span class="nb">list</span><span class="p">(</span><span class="n">asset_weights</span><span class="o">.</span><span class="n">values</span><span class="p">()),</span> <span class="n">rebal_period</span><span class="p">,</span> <span class="n">pf_name</span><span class="p">,</span> <span class="n">normalize_wts</span><span class="o">=</span><span class="n">normalize_wts</span><span class="p">)</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">start_date</span><span class="p">:]</span>
-</pre></div>
+<div class="cell border-box-sizing code_cell rendered">
 
-    </div>
+<div class="output_wrapper">
+<div class="output">
+
+<div class="output_area">
+
+
+<div class="output_markdown rendered_html output_subarea ">
+<h4 id="computePortfolioReturns" class="doc_header"><code>computePortfolioReturns</code><a href="https://github.com/rickatx/rfpfolio/tree/master/rfpfolio/core.py#L179" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>computePortfolioReturns</code>(<strong><code>p_src</code></strong>:<a href="/rfpfolio/core.html#PriceSource"><code>PriceSource</code></a>, <strong><code>asset_weights</code></strong>, <strong><code>pf_name</code></strong>, <strong><code>rebal_period</code></strong>, <strong><code>period</code></strong>=<em><code>'weekly'</code></em>, <strong><code>start_date</code></strong>=<em><code>'2017-05-01'</code></em>, <strong><code>normalize_wts</code></strong>=<em><code>False</code></em>)</p>
+</blockquote>
+<p>Given tickers and their weights, compute the sequence of portfolio returns with rebalancing at a fixed interval.</p>
+<p>Arguments:
+    p_src
+    asset_weights: dictionary from ticker to weight for this asset in pf (weights will)
+    pf_name: name for this portfolio -- will appear as column name
+    rebal_period: length of the rebalance period, expressed in number of rows of <code>price_df</code>
+    period: 'weekly', or 'monthly'
+    start_date: date of first period in sequence; first rebalance period begins with this period
+    normalize_wts: if true, normalize weights to sum to 1</p>
+<p>Returns:
+    A DataFrame containing the sequence of portfolio returns (value of 0.01 =&gt; 1% return), indexed by date.</p>
+
+</div>
+
+</div>
+
 </div>
 </div>
 
