@@ -31,10 +31,17 @@ nb_path: "00_core.ipynb"
 
 <div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<h2 id="Saying-Stuff">Saying Stuff<a class="anchor-link" href="#Saying-Stuff"> </a></h2>
+<h2 id="Load-Price-Data">Load Price Data<a class="anchor-link" href="#Load-Price-Data"> </a></h2>
 </div>
 </div>
 </div>
+    {% raw %}
+    
+<div class="cell border-box-sizing code_cell rendered">
+
+</div>
+    {% endraw %}
+
     {% raw %}
     
 <div class="cell border-box-sizing code_cell rendered">
@@ -53,10 +60,502 @@ nb_path: "00_core.ipynb"
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h4 id="say_hello" class="doc_header"><code>say_hello</code><a href="https://github.com/rickatx/rfpfolio/tree/master/rfpfolio/core.py#L6" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>say_hello</code>(<strong><code>to</code></strong>)</p>
+<h2 id="PriceSource" class="doc_header"><code>class</code> <code>PriceSource</code><a href="https://github.com/rickatx/rfpfolio/tree/master/rfpfolio/core.py#L12" class="source_link" style="float:right">[source]</a></h2><blockquote><p><code>PriceSource</code>(<strong><code>data_root</code></strong>)</p>
 </blockquote>
-<p>Say hello to somebody</p>
 
+</div>
+
+</div>
+
+</div>
+</div>
+
+</div>
+    {% endraw %}
+
+<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>Here is an example of loading some weekly data:</p>
+
+</div>
+</div>
+</div>
+    {% raw %}
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">tst_src</span> <span class="o">=</span> <span class="n">PriceSource</span><span class="p">(</span><span class="s1">&#39;testdata/2017-Apr&#39;</span><span class="p">)</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+</div>
+    {% endraw %}
+
+    {% raw %}
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">price_data</span> <span class="o">=</span> <span class="n">tst_src</span><span class="o">.</span><span class="n">loadAllAdjustedPrices</span><span class="p">([</span><span class="s1">&#39;SPY&#39;</span><span class="p">,</span> <span class="s1">&#39;IEI&#39;</span><span class="p">,</span> <span class="s1">&#39;GLD&#39;</span><span class="p">])</span>
+<span class="n">price_data</span><span class="o">.</span><span class="n">head</span><span class="p">()</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="output_area">
+
+
+<div class="output_html rendered_html output_subarea output_execute_result">
+<div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>SPY</th>
+      <th>IEI</th>
+      <th>GLD</th>
+    </tr>
+    <tr>
+      <th>Date</th>
+      <th></th>
+      <th></th>
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>2017-04-03</th>
+      <td>220.896225</td>
+      <td>115.845558</td>
+      <td>119.459999</td>
+    </tr>
+    <tr>
+      <th>2017-04-10</th>
+      <td>218.369843</td>
+      <td>116.867851</td>
+      <td>122.599998</td>
+    </tr>
+    <tr>
+      <th>2017-04-17</th>
+      <td>220.323349</td>
+      <td>116.943314</td>
+      <td>122.309998</td>
+    </tr>
+    <tr>
+      <th>2017-04-24</th>
+      <td>223.601120</td>
+      <td>116.688652</td>
+      <td>120.769997</td>
+    </tr>
+    <tr>
+      <th>2017-05-01</th>
+      <td>225.122589</td>
+      <td>116.301956</td>
+      <td>117.010002</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+</div>
+
+</div>
+
+</div>
+</div>
+
+</div>
+    {% endraw %}
+
+<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h2 id="Compute-Returns">Compute Returns<a class="anchor-link" href="#Compute-Returns"> </a></h2>
+</div>
+</div>
+</div>
+    {% raw %}
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="k">def</span> <span class="nf">period_returns_from_prices</span><span class="p">(</span><span class="n">tik_prices</span><span class="p">,</span> <span class="n">wr</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Given one or more sequences of prices, compute the returns over each adjacent pair of rows.</span>
+<span class="sd">    Returns a dataframe containing period returns with row count one less than `tik_prices`.</span>
+<span class="sd">    </span>
+<span class="sd">    Arguments:</span>
+<span class="sd">        tik_prices: DataFrame of ordered prices: ticker column names, rows indexed by date</span>
+<span class="sd">        wr: if true, returns are represented as wealth ratios (1.01 &lt;=&gt; 1% return), else as </span>
+<span class="sd">        fractional returns (0.01 &lt;=&gt; 1% return)</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">prices</span> <span class="o">=</span> <span class="n">tik_prices</span><span class="o">.</span><span class="n">to_numpy</span><span class="p">()</span>
+    <span class="c1"># 1st row of ratios is 2nd row of prices divided by first, &amp; so forth</span>
+    <span class="n">ratios</span> <span class="o">=</span> <span class="n">prices</span><span class="p">[</span><span class="mi">1</span><span class="p">:]</span> <span class="o">/</span> <span class="n">prices</span><span class="p">[:</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+    <span class="n">returns</span> <span class="o">=</span> <span class="n">ratios</span> <span class="o">-</span> <span class="mi">1</span>
+    <span class="k">return</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">ratios</span> <span class="k">if</span> <span class="n">wr</span> <span class="k">else</span> <span class="n">returns</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="n">tik_prices</span><span class="o">.</span><span class="n">index</span><span class="p">[</span><span class="mi">1</span><span class="p">:],</span> <span class="n">columns</span><span class="o">=</span><span class="n">tik_prices</span><span class="o">.</span><span class="n">columns</span><span class="p">)</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+</div>
+    {% endraw %}
+
+<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>Create some example data to demonstrate usage of <code>period_returns_from_prices()</code>:</p>
+
+</div>
+</div>
+</div>
+    {% raw %}
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">spy_wk</span> <span class="o">=</span> <span class="n">tst_src</span><span class="o">.</span><span class="n">loadAdjustedPrices</span><span class="p">(</span><span class="s1">&#39;SPY&#39;</span><span class="p">)</span>
+
+<span class="c1"># These values are ajdusted prices</span>
+<span class="n">xmpl_data</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">({</span><span class="s1">&#39;A&#39;</span><span class="p">:</span> <span class="p">[</span><span class="mf">1.0</span><span class="p">,</span> <span class="mf">1.01</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">],</span>
+                          <span class="s1">&#39;B&#39;</span><span class="p">:</span> <span class="p">[</span><span class="mf">1.0</span><span class="p">,</span> <span class="mf">1.02</span><span class="p">,</span> <span class="mf">1.1</span><span class="p">]},</span>
+                         <span class="n">index</span> <span class="o">=</span> <span class="n">spy_wk</span><span class="o">.</span><span class="n">index</span><span class="p">[</span><span class="mi">4</span><span class="p">:</span><span class="mi">7</span><span class="p">])</span>
+<span class="n">xmpl_data</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="output_area">
+
+
+<div class="output_html rendered_html output_subarea output_execute_result">
+<div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>A</th>
+      <th>B</th>
+    </tr>
+    <tr>
+      <th>Date</th>
+      <th></th>
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>2017-05-01</th>
+      <td>1.00</td>
+      <td>1.00</td>
+    </tr>
+    <tr>
+      <th>2017-05-08</th>
+      <td>1.01</td>
+      <td>1.02</td>
+    </tr>
+    <tr>
+      <th>2017-05-15</th>
+      <td>1.00</td>
+      <td>1.10</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+</div>
+
+</div>
+
+</div>
+</div>
+
+</div>
+    {% endraw %}
+
+<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>Compute period returns.</p>
+
+</div>
+</div>
+</div>
+    {% raw %}
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">per_rets</span> <span class="o">=</span> <span class="n">period_returns_from_prices</span><span class="p">(</span><span class="n">xmpl_data</span><span class="p">)</span>
+<span class="n">per_rets</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="output_area">
+
+
+<div class="output_html rendered_html output_subarea output_execute_result">
+<div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>A</th>
+      <th>B</th>
+    </tr>
+    <tr>
+      <th>Date</th>
+      <th></th>
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>2017-05-08</th>
+      <td>0.010000</td>
+      <td>0.020000</td>
+    </tr>
+    <tr>
+      <th>2017-05-15</th>
+      <td>-0.009901</td>
+      <td>0.078431</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+</div>
+
+</div>
+
+</div>
+</div>
+
+</div>
+    {% endraw %}
+
+<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>Compute period returns as wealth ratios.</p>
+
+</div>
+</div>
+</div>
+    {% raw %}
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">per_rets_wr</span> <span class="o">=</span> <span class="n">period_returns_from_prices</span><span class="p">(</span><span class="n">xmpl_data</span><span class="p">,</span> <span class="n">wr</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="n">per_rets_wr</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="output_area">
+
+
+<div class="output_html rendered_html output_subarea output_execute_result">
+<div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>A</th>
+      <th>B</th>
+    </tr>
+    <tr>
+      <th>Date</th>
+      <th></th>
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>2017-05-08</th>
+      <td>1.010000</td>
+      <td>1.020000</td>
+    </tr>
+    <tr>
+      <th>2017-05-15</th>
+      <td>0.990099</td>
+      <td>1.078431</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+</div>
+
+</div>
+
+</div>
+</div>
+
+</div>
+    {% endraw %}
+
+<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p><strong>Internal use: for portfolio returns:</strong></p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+
+<pre><code>Example data to show usage of `cum_wr_to_period_returns()`</code></pre>
+
+</div>
+</div>
+</div>
+    {% raw %}
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">per_rets_wr</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="output_area">
+
+
+<div class="output_html rendered_html output_subarea output_execute_result">
+<div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>A</th>
+      <th>B</th>
+    </tr>
+    <tr>
+      <th>Date</th>
+      <th></th>
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>2017-05-08</th>
+      <td>1.010000</td>
+      <td>1.020000</td>
+    </tr>
+    <tr>
+      <th>2017-05-15</th>
+      <td>0.990099</td>
+      <td>1.078431</td>
+    </tr>
+  </tbody>
+</table>
+</div>
 </div>
 
 </div>
@@ -74,7 +573,81 @@ nb_path: "00_core.ipynb"
 
 <div class="inner_cell">
     <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="n">say_hello</span><span class="p">(</span><span class="s2">&quot;Rick&quot;</span><span class="p">)</span>
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">cum_rets</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">cumprod</span><span class="p">(</span><span class="n">per_rets_wr</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+<span class="n">cum_rets</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="output_area">
+
+
+<div class="output_html rendered_html output_subarea output_execute_result">
+<div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>A</th>
+      <th>B</th>
+    </tr>
+    <tr>
+      <th>Date</th>
+      <th></th>
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>2017-05-08</th>
+      <td>1.01</td>
+      <td>1.02</td>
+    </tr>
+    <tr>
+      <th>2017-05-15</th>
+      <td>1.00</td>
+      <td>1.10</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+</div>
+
+</div>
+
+</div>
+</div>
+
+</div>
+    {% endraw %}
+
+    {% raw %}
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">per_rets_A</span> <span class="o">=</span> <span class="n">cum_wr_to_period_returns</span><span class="p">(</span><span class="n">cum_rets</span><span class="p">[</span><span class="s1">&#39;A&#39;</span><span class="p">])</span>
+<span class="n">per_rets_A</span>
 </pre></div>
 
     </div>
@@ -89,7 +662,282 @@ nb_path: "00_core.ipynb"
 
 
 <div class="output_text output_subarea output_execute_result">
-<pre>&#39;Hello Rick!&#39;</pre>
+<pre>array([ 0.01      , -0.00990099])</pre>
+</div>
+
+</div>
+
+</div>
+</div>
+
+</div>
+    {% endraw %}
+
+<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h2 id="Portfolio-Returns">Portfolio Returns<a class="anchor-link" href="#Portfolio-Returns"> </a></h2>
+</div>
+</div>
+</div>
+    {% raw %}
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="k">def</span> <span class="nf">pf_cum_wr_seq</span><span class="p">(</span><span class="n">price_df</span><span class="p">,</span> <span class="n">weights</span><span class="p">,</span> <span class="n">rebal_period</span><span class="p">,</span> <span class="n">normalize_wts</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Compute the sequence of cumulative portfolio wealth ratios from a sequence of asset prices, with </span>
+<span class="sd">    rebalancing at a fixed interval. </span>
+<span class="sd">    </span>
+<span class="sd">    Args:</span>
+<span class="sd">        price_df: Dataframe of asset returns as (noncumulative) wealth ratios, indexed by date</span>
+<span class="sd">        weights [list]: portfolio weights for each asset ordered the same as columns of `price_df`</span>
+<span class="sd">        rebal_period: length of the rebalance period, expressed in number of rows of `price_df`</span>
+<span class="sd">        </span>
+<span class="sd">    Returns:</span>
+<span class="sd">        A python (double) array containing the sequence of portfolio values (cumulative wealth ratios)</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="c1"># weights, as a 1-row 2D matrix</span>
+    <span class="n">weight_ar</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">weights</span><span class="p">])</span>
+    
+    <span class="k">if</span> <span class="n">normalize_wts</span><span class="p">:</span>
+        <span class="n">weight_ar</span> <span class="o">=</span> <span class="n">weight_ar</span> <span class="o">/</span> <span class="n">weight_ar</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span>
+    
+    <span class="c1"># cols: wr&#39;s for a ticker.  rows: dates</span>
+    <span class="n">returns</span> <span class="o">=</span> <span class="n">price_df</span><span class="o">.</span><span class="n">to_numpy</span><span class="p">()</span>
+    
+    <span class="n">period_start_ind</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="n">pf_val</span> <span class="o">=</span> <span class="mi">1</span>
+    
+    <span class="c1"># list of pf values:</span>
+    <span class="n">pf_values</span> <span class="o">=</span> <span class="n">array</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="s1">&#39;d&#39;</span><span class="p">)</span>
+    
+    <span class="k">while</span> <span class="p">(</span><span class="n">period_start_ind</span> <span class="o">&lt;</span> <span class="n">returns</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]):</span>
+        <span class="c1"># first row of array for cumprod is the initial capital per asset</span>
+        <span class="n">row_1</span> <span class="o">=</span> <span class="n">weight_ar</span> <span class="o">*</span> <span class="n">pf_val</span>
+        
+        <span class="c1"># get the data for the next rebalance period</span>
+        <span class="n">rebal_period_return_data</span> <span class="o">=</span> <span class="n">returns</span><span class="p">[</span><span class="n">period_start_ind</span><span class="p">:</span><span class="n">period_start_ind</span><span class="o">+</span><span class="n">rebal_period</span><span class="p">]</span>
+        
+        <span class="c1"># Result of this operation: first row is initial capital per asset after rebalancing; </span>
+        <span class="c1"># each subsequent row is the capital at subsequent dates</span>
+        <span class="n">ar_for_cumprod</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">row_1</span><span class="p">,</span> <span class="n">rebal_period_return_data</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+        <span class="n">asset_values</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">cumprod</span><span class="p">(</span><span class="n">ar_for_cumprod</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+        
+        <span class="c1"># Compute sequence of portfolio values: sum of columns (asset vals) for each row.</span>
+        <span class="c1"># Drop first value as it was the sum of the intitializing values (asset values).</span>
+        <span class="n">pf_rebal_period_values</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">asset_values</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)[</span><span class="mi">1</span><span class="p">:]</span>
+        
+        <span class="c1"># append portfolio values for the rebalancing period to `pf_values`</span>
+        <span class="n">pf_values</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="n">pf_rebal_period_values</span><span class="p">)</span>
+        
+        <span class="c1"># portfolio value at the end of the rebal period; use to compute starting capital</span>
+        <span class="c1"># for each asset at the start of the next rebalancing period.</span>
+        <span class="n">pf_val</span> <span class="o">=</span> <span class="n">pf_rebal_period_values</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+        
+        <span class="n">period_start_ind</span> <span class="o">+=</span> <span class="n">rebal_period</span>
+        
+    <span class="k">return</span> <span class="n">pf_values</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+</div>
+    {% endraw %}
+
+    {% raw %}
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="k">def</span> <span class="nf">pf_period_returns</span><span class="p">(</span><span class="n">price_df</span><span class="p">,</span> <span class="n">weights</span><span class="p">,</span> <span class="n">rebal_period</span><span class="p">,</span> <span class="n">pf_name</span><span class="p">,</span> <span class="n">pf_start_val</span> <span class="o">=</span> <span class="mi">1</span><span class="p">,</span> <span class="n">normalize_wts</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Compute the sequence of portfolio period returns from a sequence of asset prices, with rebalancing </span>
+<span class="sd">    at a fixed interval.</span>
+<span class="sd">    </span>
+<span class="sd">    Arguments:</span>
+<span class="sd">        price_df: Dataframe of asset returns as (noncumulative) wealth ratios, indexed by date</span>
+<span class="sd">        weights: portfolio weights for each asset ordered the same as columns of `price_df`</span>
+<span class="sd">        pf_name: name for this portfolio -- will appear as column name</span>
+<span class="sd">        rebal_period: length of the rebalance period, expressed in number of rows of `price_df`</span>
+<span class="sd">        </span>
+<span class="sd">    Returns:</span>
+<span class="sd">        A DataFrame containing the sequence of portfolio period returns</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="c1"># Compute portfolio cumulative wealth ratios (with rebalancing).</span>
+    <span class="n">pf_val_ar</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">pf_cum_wr_seq</span><span class="p">(</span><span class="n">price_df</span><span class="p">,</span> <span class="n">weights</span><span class="p">,</span> <span class="n">rebal_period</span><span class="p">,</span> <span class="n">normalize_wts</span><span class="p">))</span>
+    
+    <span class="c1"># Cumulative wealth ratios to period returns</span>
+    <span class="n">pf_ret_ar</span> <span class="o">=</span> <span class="n">cum_wr_to_period_returns</span><span class="p">(</span><span class="n">pf_val_ar</span><span class="p">)</span>
+    
+    <span class="k">return</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">pf_ret_ar</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="n">price_df</span><span class="o">.</span><span class="n">index</span><span class="p">,</span> <span class="n">columns</span><span class="o">=</span><span class="p">[</span><span class="n">pf_name</span><span class="p">])</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+</div>
+    {% endraw %}
+
+<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p><strong>Following is the usual entry point.</strong></p>
+
+</div>
+</div>
+</div>
+    {% raw %}
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="k">def</span> <span class="nf">computePortfolioReturns</span><span class="p">(</span><span class="n">p_src</span><span class="p">:</span> <span class="n">PriceSource</span><span class="p">,</span> <span class="n">asset_weights</span><span class="p">,</span> <span class="n">pf_name</span><span class="p">,</span> <span class="n">rebal_period</span><span class="p">,</span> 
+                            <span class="n">period</span><span class="o">=</span><span class="s1">&#39;weekly&#39;</span><span class="p">,</span><span class="n">start_date</span><span class="o">=</span><span class="s1">&#39;2017-05-01&#39;</span><span class="p">,</span> <span class="n">normalize_wts</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Given tickers and their weights, compute the sequence of portfolio returns with rebalancing at a fixed interval.</span>
+<span class="sd">    </span>
+<span class="sd">    Arguments:</span>
+<span class="sd">        p_src</span>
+<span class="sd">        asset_weights: dictionary from ticker to weight for this asset in pf (weights will)</span>
+<span class="sd">        pf_name: name for this portfolio -- will appear as column name</span>
+<span class="sd">        rebal_period: length of the rebalance period, expressed in number of rows of `price_df`</span>
+<span class="sd">        period: &#39;weekly&#39;, or &#39;monthly&#39;</span>
+<span class="sd">        start_date: date of first period in sequence; first rebalance period begins with this period</span>
+<span class="sd">        normalize_wts: if true, normalize weights to sum to 1</span>
+<span class="sd">        </span>
+<span class="sd">    Returns:</span>
+<span class="sd">        A DataFrame containing the sequence of portfolio returns (value of 0.01 =&gt; 1% return), indexed by date.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">adjPrices</span> <span class="o">=</span> <span class="n">p_src</span><span class="o">.</span><span class="n">loadAllAdjustedPrices</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="n">asset_weights</span><span class="o">.</span><span class="n">keys</span><span class="p">()),</span> <span class="n">subdir</span><span class="o">=</span><span class="n">period</span><span class="p">)</span>
+    <span class="n">asset_returns</span> <span class="o">=</span> <span class="n">period_returns_from_prices</span><span class="p">(</span><span class="n">adjPrices</span><span class="p">,</span> <span class="n">wr</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">start_date</span><span class="p">:]</span>
+    
+    <span class="k">return</span> <span class="n">pf_period_returns</span><span class="p">(</span><span class="n">asset_returns</span><span class="p">,</span> <span class="nb">list</span><span class="p">(</span><span class="n">asset_weights</span><span class="o">.</span><span class="n">values</span><span class="p">()),</span> <span class="n">rebal_period</span><span class="p">,</span> <span class="n">pf_name</span><span class="p">,</span> <span class="n">normalize_wts</span><span class="o">=</span><span class="n">normalize_wts</span><span class="p">)</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">start_date</span><span class="p">:]</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+</div>
+    {% endraw %}
+
+<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h3 id="Tests">Tests<a class="anchor-link" href="#Tests"> </a></h3>
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p><strong>Set up data</strong></p>
+
+</div>
+</div>
+</div>
+    {% raw %}
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">prices_6040</span> <span class="o">=</span> <span class="n">tst_src</span><span class="o">.</span><span class="n">loadAllAdjustedPrices</span><span class="p">([</span><span class="s1">&#39;TLT&#39;</span><span class="p">,</span> <span class="s1">&#39;SPY&#39;</span><span class="p">])</span>
+<span class="n">wr_6040</span> <span class="o">=</span> <span class="n">period_returns_from_prices</span><span class="p">(</span><span class="n">prices_6040</span><span class="p">,</span> <span class="n">wr</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+</div>
+    {% endraw %}
+
+    {% raw %}
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">wr_6040</span><span class="o">.</span><span class="n">head</span><span class="p">()</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="output_area">
+
+
+<div class="output_html rendered_html output_subarea output_execute_result">
+<div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>TLT</th>
+      <th>SPY</th>
+    </tr>
+    <tr>
+      <th>Date</th>
+      <th></th>
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>2017-04-10</th>
+      <td>1.025030</td>
+      <td>0.988563</td>
+    </tr>
+    <tr>
+      <th>2017-04-17</th>
+      <td>1.000567</td>
+      <td>1.008946</td>
+    </tr>
+    <tr>
+      <th>2017-04-24</th>
+      <td>0.990368</td>
+      <td>1.014877</td>
+    </tr>
+    <tr>
+      <th>2017-05-01</th>
+      <td>0.991336</td>
+      <td>1.006804</td>
+    </tr>
+    <tr>
+      <th>2017-05-08</th>
+      <td>1.002915</td>
+      <td>0.996996</td>
+    </tr>
+  </tbody>
+</table>
+</div>
 </div>
 
 </div>
@@ -107,10 +955,476 @@ nb_path: "00_core.ipynb"
 
 <div class="inner_cell">
     <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="n">test_eq</span><span class="p">(</span><span class="n">say_hello</span><span class="p">(</span><span class="s2">&quot;Ajay&quot;</span><span class="p">),</span> <span class="s2">&quot;Hello Ajay!&quot;</span><span class="p">)</span>
+<div class=" highlight hl-ipython3"><pre><span></span><span class="c1"># For interest, choose a short period of high volatility</span>
+<span class="n">test_6040</span> <span class="o">=</span> <span class="n">wr_6040</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="s1">&#39;2020-02-17&#39;</span><span class="p">:</span><span class="s1">&#39;2020-03-30&#39;</span><span class="p">]</span>
+<span class="n">test_6040</span>
 </pre></div>
 
     </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="output_area">
+
+
+<div class="output_html rendered_html output_subarea output_execute_result">
+<div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>TLT</th>
+      <th>SPY</th>
+    </tr>
+    <tr>
+      <th>Date</th>
+      <th></th>
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>2020-02-17</th>
+      <td>1.024144</td>
+      <td>0.987796</td>
+    </tr>
+    <tr>
+      <th>2020-02-24</th>
+      <td>1.049108</td>
+      <td>0.888389</td>
+    </tr>
+    <tr>
+      <th>2020-03-02</th>
+      <td>1.073788</td>
+      <td>1.004050</td>
+    </tr>
+    <tr>
+      <th>2020-03-09</th>
+      <td>0.924431</td>
+      <td>0.905399</td>
+    </tr>
+    <tr>
+      <th>2020-03-16</th>
+      <td>1.035663</td>
+      <td>0.849547</td>
+    </tr>
+    <tr>
+      <th>2020-03-23</th>
+      <td>1.051872</td>
+      <td>1.114118</td>
+    </tr>
+    <tr>
+      <th>2020-03-30</th>
+      <td>1.004771</td>
+      <td>0.979362</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+</div>
+
+</div>
+
+</div>
+</div>
+
+</div>
+    {% endraw %}
+
+    {% raw %}
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">test_6040</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="output_area">
+
+
+<div class="output_html rendered_html output_subarea output_execute_result">
+<div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>TLT</th>
+      <th>SPY</th>
+    </tr>
+    <tr>
+      <th>Date</th>
+      <th></th>
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>2020-02-17</th>
+      <td>1.024144</td>
+      <td>0.987796</td>
+    </tr>
+    <tr>
+      <th>2020-02-24</th>
+      <td>1.049108</td>
+      <td>0.888389</td>
+    </tr>
+    <tr>
+      <th>2020-03-02</th>
+      <td>1.073788</td>
+      <td>1.004050</td>
+    </tr>
+    <tr>
+      <th>2020-03-09</th>
+      <td>0.924431</td>
+      <td>0.905399</td>
+    </tr>
+    <tr>
+      <th>2020-03-16</th>
+      <td>1.035663</td>
+      <td>0.849547</td>
+    </tr>
+    <tr>
+      <th>2020-03-23</th>
+      <td>1.051872</td>
+      <td>1.114118</td>
+    </tr>
+    <tr>
+      <th>2020-03-30</th>
+      <td>1.004771</td>
+      <td>0.979362</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+</div>
+
+</div>
+
+</div>
+</div>
+
+</div>
+    {% endraw %}
+
+<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p><strong>Test pf_cum_wr_seq()</strong></p>
+
+</div>
+</div>
+</div>
+    {% raw %}
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">expected_py_array</span> <span class="o">=</span> <span class="n">array</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="s1">&#39;d&#39;</span><span class="p">,</span> <span class="p">[</span><span class="mf">1.00233529086481</span><span class="p">,</span> <span class="mf">0.9563036816433197</span><span class="p">,</span> <span class="mf">0.9901485047549465</span><span class="p">,</span> <span class="mf">0.9040172073166807</span><span class="p">,</span> <span class="mf">0.8361477995951826</span><span class="p">,</span> <span class="mf">0.9079644552327022</span><span class="p">,</span> <span class="mf">0.8984541223283018</span><span class="p">])</span>
+<span class="k">assert</span> <span class="n">pf_cum_wr_seq</span><span class="p">(</span><span class="n">test_6040</span><span class="p">,</span> <span class="p">[</span><span class="mf">0.4</span><span class="p">,</span> <span class="mf">0.6</span><span class="p">],</span> <span class="mi">3</span><span class="p">)</span> <span class="o">==</span> <span class="n">expected_py_array</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+</div>
+    {% endraw %}
+
+    {% raw %}
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="k">assert</span> <span class="n">pf_cum_wr_seq</span><span class="p">(</span><span class="n">test_6040</span><span class="p">,</span> <span class="p">[</span><span class="mf">0.8</span><span class="p">,</span> <span class="mf">1.2</span><span class="p">],</span> <span class="mi">3</span><span class="p">,</span> <span class="n">normalize_wts</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span> <span class="o">==</span> <span class="n">expected_py_array</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+</div>
+    {% endraw %}
+
+<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p><strong>Test pf_period_returns()</strong></p>
+
+</div>
+</div>
+</div>
+    {% raw %}
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="kn">import</span> <span class="nn">empyrical.stats</span> <span class="k">as</span> <span class="nn">estats</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="output_area">
+
+<div class="output_subarea output_stream output_stderr output_text">
+<pre>C:\Users\USER\anaconda3\envs\jptrlab-pip\lib\site-packages\pandas_datareader\compat\__init__.py:7: FutureWarning: pandas.util.testing is deprecated. Use the functions in the public API at pandas.testing instead.
+  from pandas.util.testing import assert_frame_equal
+</pre>
+</div>
+</div>
+
+</div>
+</div>
+
+</div>
+    {% endraw %}
+
+    {% raw %}
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">pf_return_df</span> <span class="o">=</span> <span class="n">pf_period_returns</span><span class="p">(</span><span class="n">test_6040</span><span class="p">,</span> <span class="p">[</span><span class="mf">0.4</span><span class="p">,</span> <span class="mf">0.6</span><span class="p">],</span> <span class="mi">3</span><span class="p">,</span> <span class="s1">&#39;My Portfolio&#39;</span><span class="p">)</span>
+<span class="k">assert</span> <span class="nb">list</span><span class="p">(</span><span class="n">estats</span><span class="o">.</span><span class="n">cum_returns</span><span class="p">(</span><span class="n">pf_return_df</span><span class="p">[</span><span class="s1">&#39;My Portfolio&#39;</span><span class="p">],</span> <span class="n">starting_value</span><span class="o">=</span><span class="mi">1</span><span class="p">))</span> <span class="o">==</span> <span class="nb">list</span><span class="p">(</span><span class="n">expected_py_array</span><span class="p">)</span>
+<span class="c1"># pf_return_df</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+</div>
+    {% endraw %}
+
+    {% raw %}
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="c1"># as the rebalance periods are aligned.</span>
+<span class="c1"># skip the first two elements of wr_6040 -- rebalance times must align to get the same result</span>
+<span class="n">pf_period_returns</span><span class="p">(</span><span class="n">wr_6040</span><span class="o">.</span><span class="n">iloc</span><span class="p">[</span><span class="mi">2</span><span class="p">:,</span> <span class="p">:],</span> <span class="p">[</span><span class="mf">0.4</span><span class="p">,</span> <span class="mf">0.6</span><span class="p">],</span> <span class="mi">3</span><span class="p">,</span> <span class="s1">&#39;My Portfolio&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="s1">&#39;2020-02-17&#39;</span><span class="p">:]</span><span class="o">.</span><span class="n">head</span><span class="p">(</span><span class="mi">7</span><span class="p">)</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="output_area">
+
+
+<div class="output_html rendered_html output_subarea output_execute_result">
+<div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>My Portfolio</th>
+    </tr>
+    <tr>
+      <th>Date</th>
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>2020-02-17</th>
+      <td>0.002335</td>
+    </tr>
+    <tr>
+      <th>2020-02-24</th>
+      <td>-0.045924</td>
+    </tr>
+    <tr>
+      <th>2020-03-02</th>
+      <td>0.035391</td>
+    </tr>
+    <tr>
+      <th>2020-03-09</th>
+      <td>-0.086988</td>
+    </tr>
+    <tr>
+      <th>2020-03-16</th>
+      <td>-0.075075</td>
+    </tr>
+    <tr>
+      <th>2020-03-23</th>
+      <td>0.085890</td>
+    </tr>
+    <tr>
+      <th>2020-03-30</th>
+      <td>-0.010474</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+</div>
+
+</div>
+
+</div>
+</div>
+
+</div>
+    {% endraw %}
+
+<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p><strong>Tests for computePortfolioReturns()</strong></p>
+
+</div>
+</div>
+</div>
+    {% raw %}
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">cpv_df</span> <span class="o">=</span> <span class="n">computePortfolioReturns</span><span class="p">(</span><span class="n">tst_src</span><span class="p">,</span> <span class="p">{</span><span class="s1">&#39;SPY&#39;</span><span class="p">:</span><span class="mf">0.60</span><span class="p">,</span> <span class="s1">&#39;TLT&#39;</span><span class="p">:</span> <span class="mf">0.40</span><span class="p">},</span> <span class="s2">&quot;MyPf&quot;</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="n">start_date</span><span class="o">=</span><span class="s1">&#39;2020-02-17&#39;</span><span class="p">)</span>
+<span class="k">assert</span> <span class="p">(</span><span class="n">cpv_df</span><span class="o">.</span><span class="n">iloc</span><span class="p">[:</span><span class="mi">7</span><span class="p">,:]</span><span class="o">.</span><span class="n">values</span> <span class="o">==</span> <span class="n">pf_return_df</span><span class="o">.</span><span class="n">values</span><span class="p">)</span><span class="o">.</span><span class="n">all</span><span class="p">()</span>
+<span class="n">cpv_df</span><span class="o">.</span><span class="n">head</span><span class="p">(</span><span class="mi">7</span><span class="p">)</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="output_area">
+
+
+<div class="output_html rendered_html output_subarea output_execute_result">
+<div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>MyPf</th>
+    </tr>
+    <tr>
+      <th>Date</th>
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>2020-02-17</th>
+      <td>0.002335</td>
+    </tr>
+    <tr>
+      <th>2020-02-24</th>
+      <td>-0.045924</td>
+    </tr>
+    <tr>
+      <th>2020-03-02</th>
+      <td>0.035391</td>
+    </tr>
+    <tr>
+      <th>2020-03-09</th>
+      <td>-0.086988</td>
+    </tr>
+    <tr>
+      <th>2020-03-16</th>
+      <td>-0.075075</td>
+    </tr>
+    <tr>
+      <th>2020-03-23</th>
+      <td>0.085890</td>
+    </tr>
+    <tr>
+      <th>2020-03-30</th>
+      <td>-0.010474</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+</div>
+
+</div>
+
 </div>
 </div>
 

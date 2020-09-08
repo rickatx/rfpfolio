@@ -52,3 +52,29 @@ class PriceSource:
         """
         tik_dict = {tik:  self.loadAdjustedPrices(tik, subdir) for tik in tik_list}
         return pd.concat([tik_dict[tik] for tik in tik_list], axis=1, join='inner')
+
+# Internal Cell
+
+def cum_wr_to_period_returns(cum_wr_ar, use_log = False):
+    """
+    Convert 1D array of cumulative wealth ratios to period fractional returns (0.01 = 1% return)
+    The first element of `cum_wr_ar` is the wealth ratio for the corresponding period. (e.g., the first
+    element will be 1.01 if the corresponding period return is 1%.)
+
+    Cumulative wealth ratios are used in the computation of rebalanced portfolio returns; use this
+    to convert from portfolio cum wr to portfolio period returns.
+
+    Arguments:
+        cum_wr_ar: numpy array - dim 0 is time
+
+    Return:
+        numpy array of period returns
+    """
+    # add initial 1 so the ratio of `cum_wr_ar` offset by one with itself will be period returns
+    row1 = np.array([1.0])
+    ar_plus = np.concatenate([row1, cum_wr_ar], 0)
+
+    if use_log:
+        return np.exp(np.log(ar_plus[1:]) - np.log(ar_plus[:-1])) - 1
+    else:
+        return ar_plus[1:] / ar_plus[:-1] - 1
