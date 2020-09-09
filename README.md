@@ -2,10 +2,6 @@
 > Create portfolios with rebalancing, and measure performance.
 
 
-```python
-rfp.
-```
-
 This file will become your README and also the index of your documentation.
 
 ## Install
