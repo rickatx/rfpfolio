@@ -2,6 +2,10 @@
 > Create portfolios with rebalancing, and measure performance.
 
 
+```python
+rfp.
+```
+
 This file will become your README and also the index of your documentation.
 
 ## Install
@@ -13,7 +17,7 @@ This file will become your README and also the index of your documentation.
 Some code examples:
 
 ```python
-tst_src = PriceSource('testdata/2017-Apr')
+tst_src = rfp.PriceSource('testdata/2017-Apr')
 ```
 
 ```python
