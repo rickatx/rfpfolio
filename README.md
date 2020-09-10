@@ -18,7 +18,7 @@ Clone this repo to your machine. Navigate your shell to the cloned repo's root d
 pip install .
 ```
 or:
-````
+```
 python setup.py install
 ```
 
@@ -37,8 +37,9 @@ for asset data series of different frequencies.
 |  |--+ GLD.csv
 |  |--+ IEI.csv
 |  |--+ SPY.csv
+|
 |--+ daily
-   :
+      :
  ```
  
  Here is how to specify the root directory for your data:
@@ -134,7 +135,7 @@ pf_1_returns = rfp.computePortfolioReturns(tst_src, portfolio_1_weights, "PF_1",
 ```
 
 ```python
-pf_1_returns.head(10)
+pf_1_returns.head()
 ```
 
 
@@ -185,26 +186,6 @@ pf_1_returns.head(10)
     <tr>
       <th>2017-05-29</th>
       <td>0.006685</td>
-    </tr>
-    <tr>
-      <th>2017-06-05</th>
-      <td>-0.003417</td>
-    </tr>
-    <tr>
-      <th>2017-06-12</th>
-      <td>-0.002579</td>
-    </tr>
-    <tr>
-      <th>2017-06-19</th>
-      <td>0.003017</td>
-    </tr>
-    <tr>
-      <th>2017-06-26</th>
-      <td>-0.006514</td>
-    </tr>
-    <tr>
-      <th>2017-07-03</th>
-      <td>-0.005629</td>
     </tr>
   </tbody>
 </table>
