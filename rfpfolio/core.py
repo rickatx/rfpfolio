@@ -71,6 +71,7 @@ def period_returns_from_prices(tik_prices, wr=False):
     return pd.DataFrame(ratios if wr else returns, index=tik_prices.index[1:], columns=tik_prices.columns)
 
 # Internal Cell
+# Internal use: used in computation of portfolio returns.
 
 def cum_wr_to_period_returns(cum_wr_ar, use_log = False):
     """
@@ -79,7 +80,7 @@ def cum_wr_to_period_returns(cum_wr_ar, use_log = False):
     element will be 1.01 if the corresponding period return is 1%.)
 
     Cumulative wealth ratios are used in the computation of rebalanced portfolio returns; use this
-    to convert from portfolio cum wr to portfolio period returns.
+    to convert from portfolio cumulative wr to portfolio period returns.
 
     Arguments:
         cum_wr_ar: numpy array - dim 0 is time
@@ -177,9 +178,9 @@ def pf_period_returns(price_df, weights, rebal_period, pf_name, pf_start_val = 1
 
 # Cell
 def computePortfolioReturns(p_src: PriceSource, asset_weights, pf_name, rebal_period,
-                            period='weekly',start_date='2017-05-01', normalize_wts=False):
+                            period='weekly',start_date='2017-05-01', normalize_wts=True):
     """
-    Given tickers and their weights, compute the sequence of portfolio returns with rebalancing at a fixed interval.
+    Given tickers and their weights, compute the sequence of portfolio returns with rebalancing at the specified interval.
 
     Arguments:
         p_src
@@ -196,4 +197,8 @@ def computePortfolioReturns(p_src: PriceSource, asset_weights, pf_name, rebal_pe
     adjPrices = p_src.loadAllAdjustedPrices(list(asset_weights.keys()), subdir=period)
     asset_returns = period_returns_from_prices(adjPrices, wr=True).loc[start_date:]
 
-    return pf_period_returns(asset_returns, list(asset_weights.values()), rebal_period, pf_name, normalize_wts=normalize_wts).loc[start_date:]
+    return pf_period_returns(asset_returns,
+                             list(asset_weights.values()),
+                             rebal_period,
+                             pf_name,
+                             normalize_wts=normalize_wts).loc[start_date:]
