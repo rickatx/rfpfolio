@@ -269,6 +269,8 @@ Each column name is a ticker, and the column values are the sequence of adjusted
 </blockquote>
 <p>Given one or more sequences of prices, compute the returns over each adjacent pair of rows.
 Returns a dataframe containing period returns with row count one less than <code>tik_prices</code>.</p>
+<p>NOTE: You can also simply do: tik_prices.pct_change() for percent returns, or
+tik_prices.pct_change() + 1 for wealth ratios.</p>
 <p>Arguments:
     tik_prices: DataFrame of ordered prices: ticker column names, rows indexed by date
     wr: if true, returns are represented as wealth ratios (1.01 &lt;=&gt; 1% return), else as
@@ -565,7 +567,7 @@ Returns a dataframe containing period returns with row count one less than <code
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h4 id="computePortfolioReturns" class="doc_header"><code>computePortfolioReturns</code><a href="https://github.com/rickatx/rfpfolio/tree/master/rfpfolio/core.py#L180" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>computePortfolioReturns</code>(<strong><code>p_src</code></strong>:<a href="/rfpfolio/core.html#PriceSource"><code>PriceSource</code></a>, <strong><code>asset_weights</code></strong>, <strong><code>pf_name</code></strong>, <strong><code>rebal_period</code></strong>, <strong><code>period</code></strong>=<em><code>'weekly'</code></em>, <strong><code>start_date</code></strong>=<em><code>'2017-05-01'</code></em>, <strong><code>normalize_wts</code></strong>=<em><code>True</code></em>)</p>
+<h4 id="computePortfolioReturns" class="doc_header"><code>computePortfolioReturns</code><a href="https://github.com/rickatx/rfpfolio/tree/master/rfpfolio/core.py#L183" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>computePortfolioReturns</code>(<strong><code>p_src</code></strong>:<a href="/rfpfolio/core.html#PriceSource"><code>PriceSource</code></a>, <strong><code>asset_weights</code></strong>, <strong><code>pf_name</code></strong>, <strong><code>rebal_period</code></strong>, <strong><code>period</code></strong>=<em><code>'weekly'</code></em>, <strong><code>start_date</code></strong>=<em><code>'2017-05-01'</code></em>, <strong><code>normalize_wts</code></strong>=<em><code>True</code></em>)</p>
 </blockquote>
 <p>Given tickers and their weights, compute the sequence of portfolio returns with rebalancing at the specified interval.</p>
 <p>Arguments:

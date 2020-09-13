@@ -4,11 +4,11 @@
 
 This Python package is designed to solve a simple problem: examining the historical performance of a portfolio of assets with a specified, fixed weighting for each asset, and periodic rebalancing to the specified weighting.
 
-In other words, the goal is similar to that of https://portfoliocharts.com/
+You can get a good understanding of the value of this by browsing the information and graphics at https://portfoliocharts.com/
 
-However, here you can use your own data (perhaps for alternative asset classes) and are not restricted to choices available at portfoliocharts.com.
+Using this package, you can perform portfolio analysis using your own data, and are not restricted to choices available at portfoliocharts.com. This is useful if you are interested in exploring portfolios that include alternative asset classes, equitity allocations to a particular set of stocks, or allocations to some dynamic strategy (for which you have separately procured or generated data.)
 
-The most common application for this Python package is to import it into a Jupyter notebook, use it to generate portfolio returns for an asset weighting of interest, and then using other Python tools for analyzing and plotting the portfolio returns.
+The most common application for this Python package is to import it into a Jupyter notebook, use it to generate portfolio returns for an asset weighting of interest, and then use other tools for analyzing and plotting the portfolio returns.
 
 ## Install
 
@@ -45,6 +45,8 @@ for asset data series of different frequencies.
  Here is how to specify the root directory for your data:
 
 ```python
+import rfpfolio as rfp
+
 tst_src = rfp.PriceSource('testdata/2017-Apr')
 ```
 
@@ -205,18 +207,14 @@ import pandas as pd
 ```python
 period='weekly'
 
-# risk-free rate -- for Sharpe ratio
-rf_rate = 0.003 # ann. rate of 0.3%
-weekly_rf_rate = (1 + rf_rate)**(1/52) - 1
-
 stats_spec = {'Annual Return':lambda x:estats.annual_return(x, period),
               'Max Drawdown':estats.max_drawdown,
               'Annual Volatility':lambda x: estats.annual_volatility(x, period), 
-              'Sharpe Ratio':lambda x: estats.sharpe_ratio(x, risk_free=weekly_rf_rate, period=period)}
+              'Sharpe Ratio':lambda x: estats.sharpe_ratio(x, period=period)}
 
 stats = [f(pf_1_returns['PF_1']) for f in stats_spec.values()]
 
-pd.DataFrame({'PF_1': stats}, index=stats_spec.keys())
+pd.DataFrame({'Portfolio_1': stats}, index=stats_spec.keys())
 ```
 
 
@@ -240,7 +238,7 @@ pd.DataFrame({'PF_1': stats}, index=stats_spec.keys())
   <thead>
     <tr style="text-align: right;">
       <th></th>
-      <th>PF_1</th>
+      <th>Portfolio_1</th>
     </tr>
   </thead>
   <tbody>
@@ -258,7 +256,7 @@ pd.DataFrame({'PF_1': stats}, index=stats_spec.keys())
     </tr>
     <tr>
       <th>Sharpe Ratio</th>
-      <td>0.922193</td>
+      <td>0.955435</td>
     </tr>
   </tbody>
 </table>

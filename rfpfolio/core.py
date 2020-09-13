@@ -59,6 +59,9 @@ def period_returns_from_prices(tik_prices, wr=False):
     Given one or more sequences of prices, compute the returns over each adjacent pair of rows.
     Returns a dataframe containing period returns with row count one less than `tik_prices`.
 
+    NOTE: You can also simply do: tik_prices.pct_change() for percent returns, or
+    tik_prices.pct_change() + 1 for wealth ratios.
+
     Arguments:
         tik_prices: DataFrame of ordered prices: ticker column names, rows indexed by date
         wr: if true, returns are represented as wealth ratios (1.01 <=> 1% return), else as
