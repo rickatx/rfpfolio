@@ -132,7 +132,7 @@ For example, compute returns for a portfolio consisting of 40% large U.S. stocks
 
 ```python
 portfolio_1_weights = {'SPY': 0.4, 'IEI': 0.4, 'GLD': 0.2}
-pf_1_returns = rfp.computePortfolioReturns(tst_src, portfolio_1_weights, "PF_1", rebal_period=4, 
+pf_1_returns = rfp.computePortfolioReturns(tst_src, portfolio_1_weights, "Portfolio_1", rebal_period=4, 
                                            period='weekly', start_date='2017-05-01')
 ```
 
@@ -161,7 +161,7 @@ pf_1_returns.head()
   <thead>
     <tr style="text-align: right;">
       <th></th>
-      <th>PF_1</th>
+      <th>Portfolio_1</th>
     </tr>
     <tr>
       <th>Date</th>
@@ -212,7 +212,7 @@ stats_spec = {'Annual Return':lambda x:estats.annual_return(x, period),
               'Annual Volatility':lambda x: estats.annual_volatility(x, period), 
               'Sharpe Ratio':lambda x: estats.sharpe_ratio(x, period=period)}
 
-stats = [f(pf_1_returns['PF_1']) for f in stats_spec.values()]
+stats = [f(pf_1_returns['Portfolio_1']) for f in stats_spec.values()]
 
 pd.DataFrame({'Portfolio_1': stats}, index=stats_spec.keys())
 ```
