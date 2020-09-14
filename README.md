@@ -1,3 +1,5 @@
+![GitHub Workflow Status](https://img.shields.io/github/workflow/status/rickatx/rfpfolio/CI)
+
 # Welcome to rfpfolio
 > Generate historical return data for portfolios, with rebalancing.
 
@@ -274,3 +276,7 @@ cum_returns2.plot.line(figsize=(10,5));
 
 ![png](docs/images/output_17_0.png)
 
+
+## License
+
+Copyright 2020 Richard A. Froom. Licensed under the Apache License, Version 2.0 (the "License"); you may not use this project's files except in compliance with the License. A copy of the License is provided in the LICENSE file in this repository.
