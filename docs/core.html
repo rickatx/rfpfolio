@@ -46,6 +46,30 @@ nb_path: "00_core.ipynb"
     
 <div class="cell border-box-sizing code_cell rendered">
 
+<div class="output_wrapper">
+<div class="output">
+
+<div class="output_area">
+
+
+<div class="output_markdown rendered_html output_subarea ">
+<h2 id="PriceSource" class="doc_header"><code>class</code> <code>PriceSource</code><a href="https://github.com/rickatx/rfpfolio/tree/master/rfpfolio/core.py#L16" class="source_link" style="float:right">[source]</a></h2><blockquote><p><code>PriceSource</code>(<strong><code>data_root</code></strong>)</p>
+</blockquote>
+
+</div>
+
+</div>
+
+</div>
+</div>
+
+</div>
+    {% endraw %}
+
+    {% raw %}
+    
+<div class="cell border-box-sizing code_cell rendered">
+
 </div>
     {% endraw %}
 
@@ -55,17 +79,6 @@ nb_path: "00_core.ipynb"
 
 <div class="output_wrapper">
 <div class="output">
-
-<div class="output_area">
-
-
-<div class="output_markdown rendered_html output_subarea ">
-<h3 id="PriceSource" class="doc_header"><code>class</code> <code>PriceSource</code><a href="https://github.com/rickatx/rfpfolio/tree/master/rfpfolio/core.py#L16" class="source_link" style="float:right">[source]</a></h3><blockquote><p><code>PriceSource</code>(<strong><code>data_root</code></strong>)</p>
-</blockquote>
-
-</div>
-
-</div>
 
 <div class="output_area">
 
@@ -128,7 +141,7 @@ Each column name is a ticker, and the column values are the sequence of adjusted
 <div class="output_markdown rendered_html output_subarea ">
 <h4 id="PriceSource.load_period_returns" class="doc_header"><code>PriceSource.load_period_returns</code><a href="https://github.com/rickatx/rfpfolio/tree/master/rfpfolio/core.py#L64" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>PriceSource.load_period_returns</code>(<strong><code>spec</code></strong>, <strong><code>subdir</code></strong>=<em><code>'weekly'</code></em>)</p>
 </blockquote>
-<p>Load period returns for an asset, or a specified sequence of assets.</p>
+<p>Load period returns for an asset, or a specified temporal sequence of assets.</p>
 <p>Args:</p>
 
 <pre><code>- spec: Specifier of asset price data to load. Either a string (filename) or SpliceSpec
@@ -169,6 +182,45 @@ Each column name is a ticker, and the column values are the sequence of adjusted
 </pre></div>
 
     </div>
+</div>
+</div>
+
+</div>
+    {% endraw %}
+
+    {% raw %}
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="o">!</span>ls testdata<span class="se">\2</span><span class="m">017</span>-Apr<span class="se">\w</span>eekly
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="output_area">
+
+<div class="output_subarea output_stream output_stdout output_text">
+<pre>AGG.csv
+GLD.csv
+IEI.csv
+PDBC.csv
+SHV.csv
+SPY.csv
+TLT.csv
+VT.csv
+VTI.csv
+</pre>
+</div>
+</div>
+
 </div>
 </div>
 
@@ -272,8 +324,7 @@ Each column name is a ticker, and the column values are the sequence of adjusted
 
 <div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<p>When period returns are loaded, there is an option of specifying a sequence of data sources that are spliced together. This feature was originally added to support combining data sets from multiple sources to represent the performance of one asset class. This was needed when a single source of data did not cover the entire period of interest.</p>
-<p>The following class <a href="/rfpfolio/core.html#PSeg"><code>PSeg</code></a> is used to describe sequences of data to splice together.</p>
+<p><code>load_period_returns()</code> will return the period returns for an asset, rather than adjusted prices.</p>
 
 </div>
 </div>
@@ -281,10 +332,98 @@ Each column name is a ticker, and the column values are the sequence of adjusted
     {% raw %}
     
 <div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">return_data</span> <span class="o">=</span> <span class="n">tst_src</span><span class="o">.</span><span class="n">load_period_returns</span><span class="p">(</span><span class="s1">&#39;GLD&#39;</span><span class="p">,</span> <span class="s1">&#39;weekly&#39;</span><span class="p">)</span>
+<span class="n">return_data</span><span class="o">.</span><span class="n">head</span><span class="p">()</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="output_area">
+
+
+<div class="output_html rendered_html output_subarea output_execute_result">
+<div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>GLD</th>
+    </tr>
+    <tr>
+      <th>Date</th>
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>2017-04-10</th>
+      <td>0.026285</td>
+    </tr>
+    <tr>
+      <th>2017-04-17</th>
+      <td>-0.002365</td>
+    </tr>
+    <tr>
+      <th>2017-04-24</th>
+      <td>-0.012591</td>
+    </tr>
+    <tr>
+      <th>2017-05-01</th>
+      <td>-0.031134</td>
+    </tr>
+    <tr>
+      <th>2017-05-08</th>
+      <td>-0.001538</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+</div>
+
+</div>
+
+</div>
+</div>
 
 </div>
     {% endraw %}
 
+<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h3 id="Load-Price-Data-from-Spliced-Data-Sources">Load Price Data from Spliced Data Sources<a class="anchor-link" href="#Load-Price-Data-from-Spliced-Data-Sources"> </a></h3>
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>When period returns are loaded (using method <code>load_period_returns()</code>) there is an option of specifying a sequence of data sources that are spliced together. This feature was originally added to support combining data sets from multiple sources to represent the performance of one asset class. This was needed when a single source of data did not cover the entire period of interest.</p>
+<p>The following classes <a href="/rfpfolio/core.html#SpliceSpec"><code>SpliceSpec</code></a> and <a href="/rfpfolio/core.html#PSeg"><code>PSeg</code></a> are used to describe sequences of data to splice together.</p>
+
+</div>
+</div>
+</div>
     {% raw %}
     
 <div class="cell border-box-sizing code_cell rendered">
@@ -296,7 +435,7 @@ Each column name is a ticker, and the column values are the sequence of adjusted
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h4 id="PSeg" class="doc_header"><code>class</code> <code>PSeg</code><a href="https://github.com/rickatx/rfpfolio/tree/master/rfpfolio/core.py#L114" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>PSeg</code>(<strong><code>fname</code></strong>:<code>str</code>, <strong><code>start</code></strong>:<code>str</code>)</p>
+<h2 id="PSeg" class="doc_header"><code>class</code> <code>PSeg</code><a href="https://github.com/rickatx/rfpfolio/tree/master/rfpfolio/core.py#L113" class="source_link" style="float:right">[source]</a></h2><blockquote><p><code>PSeg</code>(<strong><code>fname</code></strong>:<code>str</code>, <strong><code>start</code></strong>:<code>str</code>)</p>
 </blockquote>
 <p>Asset filename and start date -- used to specify sequential concatenations of various asset prices.</p>
 
@@ -321,7 +460,7 @@ Each column name is a ticker, and the column values are the sequence of adjusted
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h4 id="SpliceSpec" class="doc_header"><code>class</code> <code>SpliceSpec</code><a href="https://github.com/rickatx/rfpfolio/tree/master/rfpfolio/core.py#L135" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>SpliceSpec</code>(<strong><code>name</code></strong>:<code>str</code>, <strong><code>sequence</code></strong>:<code>List</code>[<a href="/rfpfolio/core.html#PSeg"><code>PSeg</code></a>]) :: <code>tuple</code></p>
+<h2 id="SpliceSpec" class="doc_header"><code>class</code> <code>SpliceSpec</code><a href="https://github.com/rickatx/rfpfolio/tree/master/rfpfolio/core.py#L134" class="source_link" style="float:right">[source]</a></h2><blockquote><p><code>SpliceSpec</code>(<strong><code>name</code></strong>:<code>str</code>, <strong><code>sequence</code></strong>:<code>List</code>[<a href="/rfpfolio/core.html#PSeg"><code>PSeg</code></a>]) :: <code>tuple</code></p>
 </blockquote>
 <p>Specification for a data source created from a sequence of asset prices.</p>
 <p>Fields:</p>
@@ -335,6 +474,13 @@ Each column name is a ticker, and the column values are the sequence of adjusted
 
 </div>
 </div>
+
+</div>
+    {% endraw %}
+
+    {% raw %}
+    
+<div class="cell border-box-sizing code_cell rendered">
 
 </div>
     {% endraw %}
@@ -353,7 +499,7 @@ Each column name is a ticker, and the column values are the sequence of adjusted
 
 <div class="inner_cell">
     <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="n">spec1</span> <span class="o">=</span> <span class="n">SpliceSpec</span><span class="p">(</span><span class="s1">&#39;Combined&#39;</span><span class="p">,</span> <span class="p">[</span><span class="n">PSeg</span><span class="p">(</span><span class="s1">&#39;IEI&#39;</span><span class="p">,</span> <span class="kc">None</span><span class="p">),</span> <span class="n">PSeg</span><span class="p">(</span><span class="s1">&#39;SPY&#39;</span><span class="p">,</span> <span class="s1">&#39;2018-06&#39;</span><span class="p">)])</span>
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">spec1</span> <span class="o">=</span> <span class="n">SpliceSpec</span><span class="p">(</span><span class="s1">&#39;Combined&#39;</span><span class="p">,</span> <span class="p">[</span><span class="n">PSeg</span><span class="p">(</span><span class="s1">&#39;SHV&#39;</span><span class="p">,</span> <span class="kc">None</span><span class="p">),</span> <span class="n">PSeg</span><span class="p">(</span><span class="s1">&#39;SPY&#39;</span><span class="p">,</span> <span class="s1">&#39;2018-06&#39;</span><span class="p">)])</span>
 <span class="n">res</span> <span class="o">=</span> <span class="n">tst_src</span><span class="o">.</span><span class="n">load_period_returns</span><span class="p">(</span><span class="n">spec1</span><span class="p">,</span> <span class="n">subdir</span><span class="o">=</span><span class="s1">&#39;weekly&#39;</span><span class="p">)</span>
 </pre></div>
 
@@ -413,19 +559,19 @@ Each column name is a ticker, and the column values are the sequence of adjusted
   <tbody>
     <tr>
       <th>2018-05-07</th>
-      <td>-0.000160</td>
+      <td>0.001388</td>
     </tr>
     <tr>
       <th>2018-05-14</th>
-      <td>-0.002265</td>
+      <td>0.000272</td>
     </tr>
     <tr>
       <th>2018-05-21</th>
-      <td>0.006893</td>
+      <td>0.000544</td>
     </tr>
     <tr>
       <th>2018-05-28</th>
-      <td>-0.000835</td>
+      <td>-0.001087</td>
     </tr>
     <tr>
       <th>2018-06-04</th>
@@ -470,13 +616,6 @@ Each column name is a ticker, and the column values are the sequence of adjusted
     
 <div class="cell border-box-sizing code_cell rendered">
 
-</div>
-    {% endraw %}
-
-    {% raw %}
-    
-<div class="cell border-box-sizing code_cell rendered">
-
 <div class="output_wrapper">
 <div class="output">
 
@@ -484,7 +623,7 @@ Each column name is a ticker, and the column values are the sequence of adjusted
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h4 id="period_returns_from_prices" class="doc_header"><code>period_returns_from_prices</code><a href="https://github.com/rickatx/rfpfolio/tree/master/rfpfolio/core.py#L146" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>period_returns_from_prices</code>(<strong><code>tik_prices</code></strong>, <strong><code>wr</code></strong>=<em><code>False</code></em>)</p>
+<h4 id="period_returns_from_prices" class="doc_header"><code>period_returns_from_prices</code><a href="https://github.com/rickatx/rfpfolio/tree/master/rfpfolio/core.py#L145" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>period_returns_from_prices</code>(<strong><code>tik_prices</code></strong>, <strong><code>wr</code></strong>=<em><code>False</code></em>)</p>
 </blockquote>
 <p>Given one or more sequences of prices, compute the returns over each adjacent pair of rows.
 Returns a dataframe containing period returns with row count one less than <code>tik_prices</code>.</p>
@@ -501,6 +640,13 @@ tik_prices.pct_change() + 1 for wealth ratios.</p>
 
 </div>
 </div>
+
+</div>
+    {% endraw %}
+
+    {% raw %}
+    
+<div class="cell border-box-sizing code_cell rendered">
 
 </div>
     {% endraw %}
@@ -772,13 +918,6 @@ tik_prices.pct_change() + 1 for wealth ratios.</p>
     
 <div class="cell border-box-sizing code_cell rendered">
 
-</div>
-    {% endraw %}
-
-    {% raw %}
-    
-<div class="cell border-box-sizing code_cell rendered">
-
 <div class="output_wrapper">
 <div class="output">
 
@@ -786,7 +925,7 @@ tik_prices.pct_change() + 1 for wealth ratios.</p>
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h4 id="computePortfolioReturns" class="doc_header"><code>computePortfolioReturns</code><a href="https://github.com/rickatx/rfpfolio/tree/master/rfpfolio/core.py#L272" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>computePortfolioReturns</code>(<strong><code>p_src</code></strong>:<a href="/rfpfolio/core.html#PriceSource"><code>PriceSource</code></a>, <strong><code>asset_weights</code></strong>, <strong><code>pf_name</code></strong>, <strong><code>rebal_period</code></strong>, <strong><code>period</code></strong>=<em><code>'weekly'</code></em>, <strong><code>start_date</code></strong>=<em><code>'2017-05-01'</code></em>, <strong><code>normalize_wts</code></strong>=<em><code>True</code></em>)</p>
+<h4 id="computePortfolioReturns" class="doc_header"><code>computePortfolioReturns</code><a href="https://github.com/rickatx/rfpfolio/tree/master/rfpfolio/core.py#L271" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>computePortfolioReturns</code>(<strong><code>p_src</code></strong>:<a href="/rfpfolio/core.html#PriceSource"><code>PriceSource</code></a>, <strong><code>asset_weights</code></strong>, <strong><code>pf_name</code></strong>, <strong><code>rebal_period</code></strong>, <strong><code>period</code></strong>=<em><code>'weekly'</code></em>, <strong><code>start_date</code></strong>=<em><code>'2017-05-01'</code></em>, <strong><code>normalize_wts</code></strong>=<em><code>True</code></em>)</p>
 </blockquote>
 <p>Given tickers and their weights, compute the sequence of portfolio returns with rebalancing at the specified interval.</p>
 <p>Arguments:
@@ -806,6 +945,13 @@ tik_prices.pct_change() + 1 for wealth ratios.</p>
 
 </div>
 </div>
+
+</div>
+    {% endraw %}
+
+    {% raw %}
+    
+<div class="cell border-box-sizing code_cell rendered">
 
 </div>
     {% endraw %}
@@ -1248,6 +1394,44 @@ tik_prices.pct_change() + 1 for wealth ratios.</p>
 </div>
 </div>
 
+</div>
+
+</div>
+</div>
+
+</div>
+    {% endraw %}
+
+<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h2 id="Notebook-Export">Notebook Export<a class="anchor-link" href="#Notebook-Export"> </a></h2>
+</div>
+</div>
+</div>
+    {% raw %}
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">notebook2script</span><span class="p">()</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="output_area">
+
+<div class="output_subarea output_stream output_stdout output_text">
+<pre>Converted 00_core.ipynb.
+Converted index.ipynb.
+</pre>
+</div>
 </div>
 
 </div>

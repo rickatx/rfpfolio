@@ -62,7 +62,7 @@ class PriceSource:
         return df.pct_change().dropna()
 
     def load_period_returns(self, spec, subdir='weekly'):
-        """Load period returns for an asset, or a specified sequence of assets.
+        """Load period returns for an asset, or a specified temporal sequence of assets.
 
         Args:
             - spec: Specifier of asset price data to load. Either a string (filename) or SpliceSpec
@@ -89,7 +89,7 @@ class PriceSource:
                 return (df.index >= start) & (df.index < end)
 
         if isinstance(spec, str):
-            return self, load_period_returns_ticker(spec, subdir)
+            return self.load_period_returns_ticker(spec, subdir)
 
         else:
             assert isinstance(spec, SpliceSpec)
@@ -98,14 +98,13 @@ class PriceSource:
             start_list = [x.start for x in spec.sequence]
             df_seq = (self.load_period_returns_ticker(x.fname, subdir) for x in spec.sequence)
 
-            # try changing list comprehension to iterable comprehension
             # ... start_list, start_list[1:]+[None] -- this produces desired date intervals
             sub_dfs = [df[date_selector(df, start, end)] for df, start, end in zip(df_seq, start_list, start_list[1:]+[None])]
 
             # give the column of all sub_dfs the same name
             for df in sub_dfs:
                 df.columns = [spec.name]
-            #return sub_dfs
+
             return pd.concat(sub_dfs)
 
 # Cell
