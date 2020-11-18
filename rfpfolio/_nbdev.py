@@ -9,9 +9,19 @@ index = {"PriceSource": "00_core.ipynb",
          "cum_wr_to_period_returns": "00_core.ipynb",
          "pf_cum_wr_seq": "00_core.ipynb",
          "pf_period_returns": "00_core.ipynb",
-         "computePortfolioReturns": "00_core.ipynb"}
+         "computePortfolioReturns": "00_core.ipynb",
+         "computePortfolioReturns2": "00_core.ipynb",
+         "DateRange": "01_Stats.ipynb",
+         "ret_vol_combos": "01_Stats.ipynb",
+         "plot_bullet": "01_Stats.ipynb",
+         "VOL_STANDARD": "01_Stats.ipynb",
+         "VOL_DOWNSIDE": "01_Stats.ipynb",
+         "window_gen": "01_Stats.ipynb",
+         "window_stats": "01_Stats.ipynb",
+         "rolling_optimal_combo_stats": "01_Stats.ipynb"}
 
-modules = ["core.py"]
+modules = ["core.py",
+           "stats.py"]
 
 doc_url = "https://rickatx.github.io/rfpfolio/"
 
