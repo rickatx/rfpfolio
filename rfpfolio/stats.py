@@ -174,7 +174,8 @@ def window_stats(return_series, window_len, window_step, stat_fns):
     return pd.DataFrame(stats_list, index=date_list)
 
 # Cell
-def rolling_optimal_combo_stats(ret1, ret2, window_len, window_step, nsteps=20, period='monthly', rebal_period=3):
+def rolling_optimal_combo_stats(ret1, ret2, window_len, window_step, nsteps=20, period='monthly', rebal_period=3,
+                               downside_vol=True):
     """Find the optimal (volatility-minimizing) combination of two return series over a rolling window.
 
     Args:
@@ -186,10 +187,14 @@ def rolling_optimal_combo_stats(ret1, ret2, window_len, window_step, nsteps=20, 
      - nsteps: divide toe [0.0, 1.0] interval into this many steps in the search for the min vol combination
      - period: return interval in `ret1`, `ret2`: {'daily', 'weekly', 'monthly'}
      - rebal_period: interval for rebalancing the allocation; expressed as number of periods of type `period`
+     - downside_vol: If true, use downside deviation as volatility metric, else standard deviation
 
     Return:
      - DataFrame containing portfolio performance stats for the optimal portfolio over each window.
     """
+    # column name of chosen volatility metric
+    vol_column = 'downside_dev' if downside_vol else 'standard_dev'
+
     # find the inner-joined indices of the two return series
     joined_index = pd.concat([ret1, ret2], axis=1, join='inner').index
 
@@ -198,7 +203,7 @@ def rolling_optimal_combo_stats(ret1, ret2, window_len, window_step, nsteps=20, 
     data = []
     dates = []
     for start_date, end_date in window_gen(joined_index, window_len, window_step):
-        print(start_date, end_date)
+
         df, _ = ret_vol_combos(ret1[start_date:end_date], ret2[start_date:end_date], nsteps, period, rebal_period)
 
         # pick "optimal" portfolio -- choose one with minimum volatility (could use std or downside)
