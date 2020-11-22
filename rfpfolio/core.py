@@ -61,7 +61,7 @@ class PriceSource:
         prices.columns = ['Date', ticker]
         return prices.set_index('Date')
 
-    def loadAllAdjustedPrices(self, tickers, subdir=None):
+    def load_all_adjusted_prices(self, tickers, subdir=None):
         """
         Load adjusted price data for all tickers to a dataframe, indexed by date.
         Each column name is a ticker, and the column values are the sequence of adjusted prices.
