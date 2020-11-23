@@ -82,18 +82,36 @@ class PriceSource:
             tik_dict = {tik:  self._load_adjusted_prices_single(tik, subdir) for tik in tickers}
             return pd.concat([tik_dict[tik] for tik in tickers], axis=1, join='inner')
 
-    def _load_period_returns_single(self, ticker, subdir=None):
+    def _load_period_returns_single(self, ticker, subdir=None, cpi_ticker=None):
         """Submethod of load_period_returns(). Load period returns from a single file.
 
         Args:
           - ticker: Filename, excluding '.csv' extension.
           - subdir: Subdirectory of root to load file from
+          - cpi_df: If not None, use CPI data to adjust prices to current. (col 'CPI', indexed by date)
         """
         subdir =  subdir if subdir is not None else self.subdir_default
         df = self._load_adjusted_prices_single(ticker, subdir)
+
+        if cpi_ticker is not None:
+            # Note: We choose to convert prices directly instead of using CPI % change for each period
+            # to avoid accumulating error from the % change operation.
+
+            cpi_df = self._load_adjusted_prices_single(cpi_ticker, subdir=subdir)
+
+            # Express prices in terms of most recent value of USD currency
+            cpi_current = cpi_df.iloc[-1, 0] # last row of first col -- most recent val for CPI
+
+            # join price data with CPI on date
+            df = df.join(cpi_df, how='inner')
+            # real price at time t in terms of current currency value (price_t * cpi_current / cpi_t)
+            real_price = df.iloc[:,0] * cpi_current / df.iloc[:,1]
+            # Indicate that this is CPI-adjusted price in the column name
+            df = real_price.to_frame(df.columns[0]+'_cpi')
+
         return df.pct_change().dropna()
 
-    def load_period_returns(self, spec, subdir=None):
+    def load_period_returns(self, spec, subdir=None, cpi_ticker=None):
         """Load period returns for an asset, or a specified temporal sequence of assets.
 
         Args:
@@ -101,6 +119,8 @@ class PriceSource:
               or SpliceSpec
             - subdir: subdirectory of root to load files from. Usual convention is to specify interval:
               'daily', 'weekly', 'monthly'
+            - cpi_ticker: If specified, load CPI data from the specified file, and make CPI
+              adjustments to the return data.
 
         Returns:
             - DataFrame of period returns for asset (or asset sequence) described by `spec`.
@@ -122,14 +142,14 @@ class PriceSource:
 
         subdir =  subdir if subdir is not None else self.subdir_default
         if isinstance(spec, str):
-            return self._load_period_returns_single(spec, subdir)
+            return self._load_period_returns_single(spec, subdir, cpi_ticker)
 
         else:
             assert isinstance(spec, SpliceSpec)
 
             # with start_list = [d0, d1, d2], resulting date intervals are [d0, d1), [d1, d2), [d2, ..)
             start_list = [x.start for x in spec.sequence]
-            df_seq = (self._load_period_returns_single(x.fname, subdir) for x in spec.sequence)
+            df_seq = (self._load_period_returns_single(x.fname, subdir, cpi_ticker) for x in spec.sequence)
 
             # ... start_list, start_list[1:]+[None] -- this produces desired date intervals
             sub_dfs = [df[date_selector(df, start, end)] for df, start, end in zip(df_seq, start_list, start_list[1:]+[None])]
@@ -140,20 +160,22 @@ class PriceSource:
 
             return pd.concat(sub_dfs)
 
-    def load_all_period_returns(self, asset_spec_list, subdir=None):
+    def load_all_period_returns(self, asset_spec_list, subdir=None, cpi_ticker=None):
         """Load period returns for multiple assets. Return a DataFrame with one column per asset.
 
         Args:
             - asset_spec_list: List of specifiers of asset price data to load. Each is a filename or SpliceSpec
             - subdir: subdirectory of root to find data. Usual convention is to specify interval:
             'daily', 'weekly', 'monthly'
+            - cpi_ticker: If specified, load CPI data from the specified file, and make CPI
+              adjustments to the return data.
 
         Returns:
             - DataFrame of period returns for each asset in `asset_spec_list`.
         """
         subdir =  subdir if subdir is not None else self.subdir_default
 
-        all_period_returns = [self.load_period_returns(spec, subdir) for spec in asset_spec_list]
+        all_period_returns = [self.load_period_returns(spec, subdir, cpi_ticker) for spec in asset_spec_list]
         return pd.concat(all_period_returns, axis=1, join='inner')
 
 # Cell
@@ -297,7 +319,7 @@ def pf_period_returns(price_df, weights, rebal_period, pf_name, pf_start_val = 1
 
 # Cell
 def computePortfolioReturns(p_src: PriceSource, asset_wt_list, pf_name, rebal_period,
-                            period=None, start_date=None, normalize_wts=True, wr=False):
+                            period=None, cpi_ticker=None, start_date=None, normalize_wts=True, wr=False):
     """
     Given asset specs and their weights, compute the sequence of portfolio returns with rebalancing at the specified interval.
 
@@ -307,6 +329,8 @@ def computePortfolioReturns(p_src: PriceSource, asset_wt_list, pf_name, rebal_pe
      - pf_name: name for this portfolio -- will appear as column name
      - rebal_period: length of the rebalance period, expressed in number of rows of `price_df`
      - period: Either None, 'daily', 'weekly', or 'monthly'. If None, use `p_src` default.
+     - cpi_ticker: If specified, load CPI data from the specified file, and make CPI
+       adjustments to the return data.
      - start_date: None or date of first period in sequence; first rebalance period begins with this period.
        If None, use first date available for all assets.
      - normalize_wts: if true, normalize weights to sum to 1
@@ -316,7 +340,7 @@ def computePortfolioReturns(p_src: PriceSource, asset_wt_list, pf_name, rebal_pe
     Returns:
         A DataFrame containing the sequence of portfolio returns , indexed by date.
     """
-    all_period_returns = [p_src.load_period_returns(spec, period) for spec, _ in asset_wt_list]
+    all_period_returns = [p_src.load_period_returns(spec, period, cpi_ticker) for spec, _ in asset_wt_list]
     asset_returns = pd.concat(all_period_returns, axis=1, join='inner')
     # return asset_returns
     asset_returns = asset_returns + 1  # returns as wealth ratios
