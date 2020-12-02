@@ -145,6 +145,7 @@ class PriceSource:
             return self._load_period_returns_single(spec, subdir, cpi_ticker)
 
         else:
+            # Load a sequence of returns over different intervals and splice them together into one sequence
             assert isinstance(spec, SpliceSpec)
 
             # with start_list = [d0, d1, d2], resulting date intervals are [d0, d1), [d1, d2), [d2, ..)
@@ -155,8 +156,9 @@ class PriceSource:
             sub_dfs = [df[date_selector(df, start, end)] for df, start, end in zip(df_seq, start_list, start_list[1:]+[None])]
 
             # give the column of all sub_dfs the same name
+            col_name = spec.name if cpi_ticker is None else spec.name+'_cpi'
             for df in sub_dfs:
-                df.columns = [spec.name]
+                df.columns = [col_name]
 
             return pd.concat(sub_dfs)
 
@@ -180,7 +182,7 @@ class PriceSource:
 
 # Cell
 
-@dataclass(frozen=True)
+@dataclass #(frozen=True) -- frozen cause problem with autoreload
 class PSeg:
     """Asset filename and start date -- used to specify sequential concatenations of various asset prices.
     """
