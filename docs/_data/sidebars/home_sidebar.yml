@@ -12,6 +12,9 @@ entries:
     - output: web,pdf
       title: rfpfolio
       url: core.html
+    - output: web,pdf
+      title: stats
+      url: Stats.html
     output: web
     title: rfpfolio
   output: web

@@ -11,7 +11,7 @@ This Python package is designed to solve a simple problem: examining the histori
 
 You can get a good understanding of the value of this by browsing the information and graphics at https://portfoliocharts.com/
 
-Using this package, you can perform portfolio analysis using your own data, and are not restricted to choices available at portfoliocharts.com. This is useful if you are interested in exploring portfolios that include alternative asset classes, equitity allocations to a particular set of stocks, or allocations to some dynamic strategy (for which you have separately procured or generated data.)
+Using this package, you can perform portfolio analysis using your own data, and are not restricted to choices available at portfoliocharts.com. This is useful if you are interested in exploring portfolios that include alternative asset classes, equity allocations to a particular set of stocks, or allocations to some dynamic strategy (for which you have separately procured or generated data.)
 
 The most common application for this Python package is to import it into a Jupyter notebook, use it to generate portfolio returns for an asset weighting of interest, and then use other tools for analyzing and plotting the portfolio returns.
 
@@ -55,10 +55,27 @@ import rfpfolio as rfp
 tst_src = rfp.PriceSource('testdata/2017-Apr')
 ```
 
+We can see what data files are available in subdirectory, and their date coverage as follows:
+
+```python
+tst_src.list_return_dates('weekly')
+```
+
+    2017-03-27 => 2020-05-25  AGG.csv
+    2017-04-03 => 2020-06-29  GLD.csv
+    2017-04-03 => 2020-06-29  IEI.csv
+    2017-04-03 => 2020-06-29  PDBC.csv
+    2017-04-03 => 2020-06-29  SHV.csv
+    2017-04-03 => 2020-06-29  SPY.csv
+    2017-04-03 => 2020-06-29  TLT.csv
+    2017-03-27 => 2020-05-25  VT.csv
+    2017-04-03 => 2020-06-29  VTI.csv
+    
+
 Let's take a peek at the data. The data should be a sequence of "adjusted prices" (adjusted for, say, dividends and stock splits). This means that the true ending value of an investment in the asset over some period is given by the adjusted price at the end of the period, divided by the beginning adjusted price, all multiplied by the initial investment.
 
 ```python
-price_data = tst_src.loadAllAdjustedPrices(['SPY', 'IEI', 'GLD'], subdir='weekly')
+price_data = tst_src.load_all_adjusted_prices(['SPY', 'IEI', 'GLD'], subdir='weekly')
 price_data.head()
 ```
 
@@ -131,12 +148,90 @@ price_data.head()
 
 
 
+### Load Asset Returns
+
+Usually, we are more interested in the asset returns over each period, rather than the adjusted prices. Load the period returns as follows:
+
+```python
+return_data = tst_src.load_all_period_returns(['SPY', 'IEI', 'GLD'], subdir='weekly')
+return_data.head()
+```
+
+
+
+
+<div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>SPY</th>
+      <th>IEI</th>
+      <th>GLD</th>
+    </tr>
+    <tr>
+      <th>Date</th>
+      <th></th>
+      <th></th>
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>2017-04-10</th>
+      <td>-0.011437</td>
+      <td>0.008825</td>
+      <td>0.026285</td>
+    </tr>
+    <tr>
+      <th>2017-04-17</th>
+      <td>0.008946</td>
+      <td>0.000646</td>
+      <td>-0.002365</td>
+    </tr>
+    <tr>
+      <th>2017-04-24</th>
+      <td>0.014877</td>
+      <td>-0.002178</td>
+      <td>-0.012591</td>
+    </tr>
+    <tr>
+      <th>2017-05-01</th>
+      <td>0.006804</td>
+      <td>-0.003314</td>
+      <td>-0.031134</td>
+    </tr>
+    <tr>
+      <th>2017-05-08</th>
+      <td>-0.003004</td>
+      <td>0.002822</td>
+      <td>-0.001538</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+
+
+
 ### Compute portfolio returns
 
 For example, compute returns for a portfolio consisting of 40% large U.S. stocks (SPY), 40% U.S. Treasury bonds (IEI), and 20% gold (GLD), rebalanced every four weeks.
 
 ```python
-portfolio_1_weights = {'SPY': 0.4, 'IEI': 0.4, 'GLD': 0.2}
+portfolio_1_weights = [('SPY', 0.4), ('IEI', 0.4), ('GLD', 0.2)]
 pf_1_returns = rfp.computePortfolioReturns(tst_src, portfolio_1_weights, "Portfolio_1", rebal_period=4, 
                                            period='weekly', start_date='2017-05-01')
 ```
@@ -277,7 +372,7 @@ cum_returns2.plot.line(figsize=(10,5));
 ```
 
 
-![png](docs/images/output_17_0.png)
+![png](docs/images/output_22_0.png)
 
 
 ## License

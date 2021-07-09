@@ -109,6 +109,52 @@ for asset data series of different frequencies.</p>
 
 <div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
+<p>We can see what data files are available in subdirectory, and their date coverage as follows:</p>
+
+</div>
+</div>
+</div>
+    {% raw %}
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">tst_src</span><span class="o">.</span><span class="n">list_return_dates</span><span class="p">(</span><span class="s1">&#39;weekly&#39;</span><span class="p">)</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="output_area">
+
+<div class="output_subarea output_stream output_stdout output_text">
+<pre>2017-03-27 =&gt; 2020-05-25  AGG.csv
+2017-04-03 =&gt; 2020-06-29  GLD.csv
+2017-04-03 =&gt; 2020-06-29  IEI.csv
+2017-04-03 =&gt; 2020-06-29  PDBC.csv
+2017-04-03 =&gt; 2020-06-29  SHV.csv
+2017-04-03 =&gt; 2020-06-29  SPY.csv
+2017-04-03 =&gt; 2020-06-29  TLT.csv
+2017-03-27 =&gt; 2020-05-25  VT.csv
+2017-04-03 =&gt; 2020-06-29  VTI.csv
+</pre>
+</div>
+</div>
+
+</div>
+</div>
+
+</div>
+    {% endraw %}
+
+<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
 <p>Let's take a peek at the data. The data should be a sequence of "adjusted prices" (adjusted for, say, dividends and stock splits). This means that the true ending value of an investment in the asset over some period is given by the adjusted price at the end of the period, divided by the beginning adjusted price, all multiplied by the initial investment.</p>
 
 </div>
@@ -121,7 +167,7 @@ for asset data series of different frequencies.</p>
 
 <div class="inner_cell">
     <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="n">price_data</span> <span class="o">=</span> <span class="n">tst_src</span><span class="o">.</span><span class="n">loadAllAdjustedPrices</span><span class="p">([</span><span class="s1">&#39;SPY&#39;</span><span class="p">,</span> <span class="s1">&#39;IEI&#39;</span><span class="p">,</span> <span class="s1">&#39;GLD&#39;</span><span class="p">],</span> <span class="n">subdir</span><span class="o">=</span><span class="s1">&#39;weekly&#39;</span><span class="p">)</span>
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">price_data</span> <span class="o">=</span> <span class="n">tst_src</span><span class="o">.</span><span class="n">load_all_adjusted_prices</span><span class="p">([</span><span class="s1">&#39;SPY&#39;</span><span class="p">,</span> <span class="s1">&#39;IEI&#39;</span><span class="p">,</span> <span class="s1">&#39;GLD&#39;</span><span class="p">],</span> <span class="n">subdir</span><span class="o">=</span><span class="s1">&#39;weekly&#39;</span><span class="p">)</span>
 <span class="n">price_data</span><span class="o">.</span><span class="n">head</span><span class="p">()</span>
 </pre></div>
 
@@ -211,6 +257,114 @@ for asset data series of different frequencies.</p>
 
 <div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
+<h3 id="Load-Asset-Returns">Load Asset Returns<a class="anchor-link" href="#Load-Asset-Returns"> </a></h3>
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>Usually, we are more interested in the asset returns over each period, rather than the adjusted prices. Load the period returns as follows:</p>
+
+</div>
+</div>
+</div>
+    {% raw %}
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">return_data</span> <span class="o">=</span> <span class="n">tst_src</span><span class="o">.</span><span class="n">load_all_period_returns</span><span class="p">([</span><span class="s1">&#39;SPY&#39;</span><span class="p">,</span> <span class="s1">&#39;IEI&#39;</span><span class="p">,</span> <span class="s1">&#39;GLD&#39;</span><span class="p">],</span> <span class="n">subdir</span><span class="o">=</span><span class="s1">&#39;weekly&#39;</span><span class="p">)</span>
+<span class="n">return_data</span><span class="o">.</span><span class="n">head</span><span class="p">()</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="output_area">
+
+
+<div class="output_html rendered_html output_subarea output_execute_result">
+<div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>SPY</th>
+      <th>IEI</th>
+      <th>GLD</th>
+    </tr>
+    <tr>
+      <th>Date</th>
+      <th></th>
+      <th></th>
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>2017-04-10</th>
+      <td>-0.011437</td>
+      <td>0.008825</td>
+      <td>0.026285</td>
+    </tr>
+    <tr>
+      <th>2017-04-17</th>
+      <td>0.008946</td>
+      <td>0.000646</td>
+      <td>-0.002365</td>
+    </tr>
+    <tr>
+      <th>2017-04-24</th>
+      <td>0.014877</td>
+      <td>-0.002178</td>
+      <td>-0.012591</td>
+    </tr>
+    <tr>
+      <th>2017-05-01</th>
+      <td>0.006804</td>
+      <td>-0.003314</td>
+      <td>-0.031134</td>
+    </tr>
+    <tr>
+      <th>2017-05-08</th>
+      <td>-0.003004</td>
+      <td>0.002822</td>
+      <td>-0.001538</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+</div>
+
+</div>
+
+</div>
+</div>
+
+</div>
+    {% endraw %}
+
+<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
 <h3 id="Compute-portfolio-returns">Compute portfolio returns<a class="anchor-link" href="#Compute-portfolio-returns"> </a></h3><p>For example, compute returns for a portfolio consisting of 40% large U.S. stocks (SPY), 40% U.S. Treasury bonds (IEI), and 20% gold (GLD), rebalanced every four weeks.</p>
 
 </div>
@@ -223,7 +377,7 @@ for asset data series of different frequencies.</p>
 
 <div class="inner_cell">
     <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="n">portfolio_1_weights</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;SPY&#39;</span><span class="p">:</span> <span class="mf">0.4</span><span class="p">,</span> <span class="s1">&#39;IEI&#39;</span><span class="p">:</span> <span class="mf">0.4</span><span class="p">,</span> <span class="s1">&#39;GLD&#39;</span><span class="p">:</span> <span class="mf">0.2</span><span class="p">}</span>
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">portfolio_1_weights</span> <span class="o">=</span> <span class="p">[(</span><span class="s1">&#39;SPY&#39;</span><span class="p">,</span> <span class="mf">0.4</span><span class="p">),</span> <span class="p">(</span><span class="s1">&#39;IEI&#39;</span><span class="p">,</span> <span class="mf">0.4</span><span class="p">),</span> <span class="p">(</span><span class="s1">&#39;GLD&#39;</span><span class="p">,</span> <span class="mf">0.2</span><span class="p">)]</span>
 <span class="n">pf_1_returns</span> <span class="o">=</span> <span class="n">rfp</span><span class="o">.</span><span class="n">computePortfolioReturns</span><span class="p">(</span><span class="n">tst_src</span><span class="p">,</span> <span class="n">portfolio_1_weights</span><span class="p">,</span> <span class="s2">&quot;Portfolio_1&quot;</span><span class="p">,</span> <span class="n">rebal_period</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span> 
                                            <span class="n">period</span><span class="o">=</span><span class="s1">&#39;weekly&#39;</span><span class="p">,</span> <span class="n">start_date</span><span class="o">=</span><span class="s1">&#39;2017-05-01&#39;</span><span class="p">)</span>
 </pre></div>

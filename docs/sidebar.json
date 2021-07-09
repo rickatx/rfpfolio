@@ -1,6 +1,7 @@
 {
   "rfpfolio": {
     "Overview": "/",
-    "rfpfolio": "core.html"
+    "rfpfolio": "core.html",
+    "stats": "Stats.html"
   }
 }
